@@ -1,61 +1,46 @@
 <template>
-  <div class="send-to-quarantine">
-    <a-modal
-      v-model="confirmVisible"
-      title="Bitte bestätigen"
-      ok-text="Ja"
-      cancel-text="Abbrechen"
-      @ok="updatePatients"
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <a-page-header
+      title="In Quarantäne senden"
+      sub-title=""
+      style="padding-left: 0; padding-right: 0;"
     >
-      <p>
-        Sollen die Quarantänen von {{ quarantinesByZip.length }} Patienten in
-        den Status 'Quarantäne angeordnet' überführt werden?
-      </p>
-      <a-form :form="form">
-        <a-form-item label="Datum der Anordnung (optional):">
-          <DateInput
-            :defaultValue="today"
-            v-decorator="[
-              'eventDate',
-              {
-                rules: [
-                  {
-                    required: false,
-                    message: 'Datum der Anordnung',
-                  },
-                ],
-              },
-            ]"
-          />
-        </a-form-item>
-      </a-form>
-    </a-modal>
-    <div style="display: flex; justify-content: flex-end;">
-      <a-button
-        class="download-all-button"
-        type="primary"
-        @click="downloadAll"
-        icon="download"
-        size="large"
-      >
-        Alle Herunterladen
-      </a-button>
-      <a-button
-        class="clear-all-button"
-        type="primary"
-        @click="showModal"
-        icon="play-circle"
-        size="large"
-      >
-        Quarantäne anordnen
-      </a-button>
-    </div>
-    <h2 style="margin-top: 30px; text-align: center;">
-      Es wurden {{ quarantinesByZip.length }} Patienten für eine Quarantäne
-      vorgemerkt.
-    </h2>
+      <template slot="extra">
+        <a-button
+          class="download-all-button"
+          @click="downloadAll"
+          icon="download"
+        >
+          Alle Herunterladen
+        </a-button>
+        <a-button
+          class="clear-all-button"
+          @click="showModal"
+          type="primary"
+          icon="play-circle"
+        >
+          Quarantäne anordnen
+        </a-button>
+      </template>
+
+      <a-row type="flex" v-if="quarantinesByZip.length > 0">
+        <a-statistic
+          title="Vorgemerkt für Quarantäne"
+          suffix="Personen"
+          :value="quarantinesByZip.length"
+        />
+      </a-row>
+
+      <div v-else style="background: white; padding: 20px;">
+        <a-empty
+          description="Aktuell wurden keine Patienten für Quarantäne vorgemerkt."
+        />
+      </div>
+    </a-page-header>
+
     <a-card
       style="max-width: 500px; margin: 2rem auto;"
+      bodyStyle="padding:0;"
       v-for="quarantinesByZip of quarantinesByZip"
       :title="
         'PLZ ' +
@@ -84,23 +69,49 @@
         </template>
       </a-table>
     </a-card>
+    <a-modal
+      v-model="confirmVisible"
+      title="Bitte bestätigen"
+      ok-text="Ja"
+      cancel-text="Abbrechen"
+      @ok="updatePatients"
+    >
+      <p>
+        Sollen die Quarantänen von {{ quarantinesByZip.length }} Patienten in
+        den Status 'Quarantäne angeordnet' überführt werden?
+      </p>
+      <a-form :form="form">
+        <a-form-item label="Datum der Anordnung (optional):">
+          <DateInput
+            v-decorator="[
+              'eventDate',
+              {
+                initialValue: today,
+                rules: [
+                  {
+                    required: false,
+                    message: 'Datum der Anordnung',
+                  },
+                ],
+              },
+            ]"
+          />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts">
 import Api from '@/api'
 import Vue from 'vue'
-import {
-  QuarantineIncident,
-  ExposureContactFromServer,
-  ExposureContactContactView,
-} from '@/api/SwaggerApi'
+import { QuarantineIncident, ExposureContactFromServer } from '@/api/SwaggerApi'
 import { Column } from 'ant-design-vue/types/table/column'
 import moment from 'moment'
 import { getPlzs } from '@/util/plz-service'
 import { downloadCsv } from '@/util/export-service'
-import DateInput from '../components/DateInput.vue'
-import { testResults, TestResultType } from '@/models/event-types'
+import DateInput from '@/components/inputs/DateInput.vue'
+import { testResults } from '@/models/event-types'
 
 const columnsQuarantines = [
   {
@@ -138,7 +149,7 @@ interface State {
   quarantinesByZip: QuarantinesForZip[]
   columnsQuarantines: Partial<Column>[]
   confirmVisible: boolean // eslint-disable-next-line
-  form: any;
+  form: any
   today: moment.Moment
   patientInfectionSources: Map<string, ExposureContactFromServer[]> // Patient-ID - ExposureContactFromServer list
   patientTestResults: Map<string, string[]> // Patient-ID - Test result list
@@ -196,7 +207,6 @@ export default Vue.extend({
     }
     // Test Results for CSV download
     const testIncidents = await Api.getPatientsCurrentByTypeUsingPost(
-      'test',
       patientIDs
     )
     for (const patientId in testIncidents) {
@@ -339,37 +349,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss">
-.send-to-quarantine {
-  .ant-card-body {
-    padding: 0;
-  }
-}
-</style>
-
-<style lang="scss" scoped>
-.download-all-button {
-  position: absolute;
-  top: 90px;
-  right: 25px;
-}
-
-.clear-all-button {
-  position: absolute;
-  top: 150px;
-  right: 25px;
-}
-
-@media (max-width: 1300px) {
-  .download-all-button {
-    position: inherit;
-    margin: 10px;
-  }
-
-  .clear-all-button {
-    position: inherit;
-    margin: 10px;
-  }
-}
-</style>

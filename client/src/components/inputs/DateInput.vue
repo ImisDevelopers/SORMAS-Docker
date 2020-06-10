@@ -3,7 +3,6 @@
     v-bind="$attrs"
     v-on="$listeners"
     :value="value"
-    :defaultValue="defaultValue"
     :format="format"
     :open="open || dateOfBirthPickerOpen"
     @focus="datePickerFocused"
@@ -39,8 +38,7 @@ export default mixins(FormControlMixin).extend({
     value: { default: undefined },
     open: { default: false },
     placeholder: { default: 'z.B. 28.02.1986' },
-    format: { default: [ 'DD.MM.YYYY', 'D.M.YYYY' ] },
-    defaultValue: { default: undefined },
+    format: { default: () => ['DD.MM.YYYY', 'D.M.YYYY'] },
   },
   data(): State {
     return {

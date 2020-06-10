@@ -1,4 +1,11 @@
-import { CreateInstitutionDTO, RegisterUserRequest } from '@/api/SwaggerApi'
+import {
+  CreateInstitutionDTO,
+  RegisterUserRequest,
+  TestIncident,
+  HospitalizationIncident,
+  QuarantineIncident,
+  AdministrativeIncident,
+} from '@/api/SwaggerApi'
 
 export type InstitutionType = Exclude<
   CreateInstitutionDTO['institutionType'],
@@ -15,21 +22,20 @@ export type UserRole = Exclude<RegisterUserRequest['userRole'], undefined>
 export type PatientStatus =
   | 'REGISTERED'
   | 'SUSPECTED'
-  | 'SCHEDULED_FOR_TESTING'
   | 'ORDER_TEST'
-  | 'TEST_SUBMITTED_IN_PROGRESS'
+  | 'SCHEDULED_FOR_TESTING'
+  | 'TEST_SUBMITTED'
   | 'TEST_FINISHED_POSITIVE'
   | 'TEST_FINISHED_NEGATIVE'
-  | 'TEST_FINISHED_INVALID'
-  | 'TEST_FINISHED_RECOVERED'
-  | 'TEST_FINISHED_NOT_RECOVERED'
   | 'PATIENT_DEAD'
   | 'DOCTORS_VISIT'
-  | 'QUARANTINE_SELECTED' /* Vorgemerkt */
+  | 'QUARANTINE_SELECTED'
   | 'QUARANTINE_MANDATED'
   | 'QUARANTINE_RELEASED'
   | 'QUARANTINE_PROFESSIONBAN_RELEASED'
   | 'HOSPITALIZATION_MANDATED'
+  | 'HOSPITALIZATION_RELEASED'
+  | 'CASE_DATA_UPDATED'
 export type RiskOccupation =
   | 'NO_RISK_OCCUPATION'
   | 'FIRE_FIGHTER_POLICE'
@@ -39,6 +45,12 @@ export type RiskOccupation =
   | 'DOCTOR'
   | 'CAREGIVER'
   | 'NURSE'
+
+export type Incident =
+  | TestIncident
+  | HospitalizationIncident
+  | QuarantineIncident
+  | AdministrativeIncident
 
 export interface Option {
   label: string

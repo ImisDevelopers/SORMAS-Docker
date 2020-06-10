@@ -102,7 +102,8 @@ services:
       - autoheal=true
     links:
       - sormas
-    image: hzibraunschweig/sormas-apache2:${SORMAS_DOCKER_VERSION}
+    build:
+      context: apache2
     environment:
       - SORMAS_SERVER_URL=${SORMAS_SERVER_URL}
       - TZ=${TZ}
@@ -143,3 +144,9 @@ services:
       - CURL_TIMEOUT=30
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  imis:
+    restart: unless-stopped
+    build:
+      context: client
+    ports:
+    - 8080:8080

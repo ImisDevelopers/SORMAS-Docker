@@ -175,7 +175,7 @@
                 {
                   rules: [
                     {
-                      required: true,
+                      required: false,
                       message: 'Bitte Email eingeben',
                     },
                   ],
@@ -193,7 +193,7 @@
                 {
                   rules: [
                     {
-                      required: true,
+                      required: false,
                       message: 'Bitte Telefonnummer eingeben',
                     },
                   ],
@@ -216,7 +216,7 @@
                 {
                   rules: [
                     {
-                      required: true,
+                      required: false,
                       message: 'Bitte Beruf eingeben',
                     },
                   ],
@@ -271,13 +271,28 @@
       <h4>Krankenkasse</h4>
       <a-row :gutter="12">
         <a-col :lg="12" :sm="24">
-          <a-form-item label="Krankenkasse">
-            <a-input
+          <a-form-item label="Krankenkasse (optional)">
+            <a-auto-complete
+              @search="searchInsuranceCompanies"
+              :filterOption="false"
               v-decorator="[
                 'insuranceCompany',
                 { initialValue: patientInput.insuranceCompany },
               ]"
-            />
+            >
+              <template slot="dataSource">
+                <a-select-option
+                  :key="company"
+                  v-for="company in insuranceCompanies.preDefined"
+                  >{{ company }}</a-select-option
+                >
+                <a-select-option
+                  :key="company"
+                  v-for="company in insuranceCompanies.userDefined"
+                  >{{ company }}</a-select-option
+                >
+              </template>
+            </a-auto-complete>
           </a-form-item>
         </a-col>
         <a-col :lg="12" :sm="24">
@@ -302,11 +317,12 @@ import {
   RISK_OCCUPATIONS,
   RiskOccupationOption,
 } from '@/models/risk-occupation'
-import DateInput from '@/components/DateInput.vue'
-import LocationFormGroup from '@/components/LocationFormGroup.vue'
-import PlzInput from '@/components/PlzInput.vue'
-import { Patient } from '@/api/SwaggerApi'
+import Api from '@/api'
+import DateInput from '@/components/inputs/DateInput.vue'
+import LocationFormGroup from '@/components/form-groups/LocationFormGroup.vue'
+import { Patient, HealthInsuranceCompanies } from '@/api/SwaggerApi'
 import moment, { Moment } from 'moment'
+import { TextMatcher, TextMatcherResult } from '@/util/search'
 
 /**
  * Autocomplete for Patients
@@ -324,17 +340,23 @@ export interface State {
   initialDateOfBirth: Moment | undefined
   initialDateOfDeath: Moment | undefined
   initialRiskOccupation: string | undefined
+  insuranceCompanies: HealthInsuranceCompanies
+  availableInsuranceCompanies: HealthInsuranceCompanies
 }
 
 export default Vue.extend({
   name: 'PatientStammdaten',
   props: ['form', 'showStay', 'showDeath', 'patient'],
   created() {
+    Api.getHealthInsuranceCompaniesUsingGet().then(
+      (companies) => (this.availableInsuranceCompanies = companies)
+    )
+
     if (this.patient) {
       this.patientInput = this.patient
       this.initialDateOfBirth = moment(this.patientInput.dateOfBirth)
       if (this.patientInput.dateOfDeath) {
-        this.initialDateOfBirth = moment(this.patientInput.dateOfDeath)
+        this.initialDateOfDeath = moment(this.patientInput.dateOfDeath)
       }
       this.initialRiskOccupation =
         this.patientInput.riskOccupation || 'NO_RISK_OCCUPATION'
@@ -342,14 +364,23 @@ export default Vue.extend({
     }
   },
   data(): State {
+    const initialInsuranceCompanies = {
+      preDefined: [],
+      userDefined: [],
+    }
+
     return {
       disableOccupation: true,
       riskOccupations: RISK_OCCUPATIONS,
       showDateOfDeath: false,
-      patientInput: {},
+      patientInput: {
+        patientStatus: 'REGISTERED',
+      },
       initialDateOfBirth: undefined,
       initialDateOfDeath: undefined,
       initialRiskOccupation: undefined,
+      insuranceCompanies: initialInsuranceCompanies,
+      availableInsuranceCompanies: initialInsuranceCompanies,
     }
   },
   components: {
@@ -382,6 +413,34 @@ export default Vue.extend({
     },
     diedChanged(event: Event) {
       this.showDateOfDeath = (event.target as any).value
+    },
+    searchInsuranceCompanies(search: string) {
+      const matcher = new TextMatcher(search, { withScore: true })
+
+      const [preDefined, userDefined] = [
+        this.availableInsuranceCompanies.preDefined as string[],
+        this.availableInsuranceCompanies.userDefined as string[],
+      ].map((companies) =>
+        companies
+          .map(
+            (company) =>
+              [company, matcher.match(company)] as [string, TextMatcherResult]
+          )
+          .filter(([company, matchResult]) => matchResult.matches)
+          // Modify score to match density (score per word)
+          .map(([company, matchResult]) => {
+            matchResult.score /= company.split(/\s+/g).length
+            return [company, matchResult] as [string, TextMatcherResult]
+          })
+          // Sort by score, descending
+          .sort((o1, o2) => -1 * (o1[1].score - o2[1].score))
+          .map(([company, matchResult]) => company)
+      )
+
+      this.insuranceCompanies = {
+        preDefined,
+        userDefined,
+      }
     },
   },
 })

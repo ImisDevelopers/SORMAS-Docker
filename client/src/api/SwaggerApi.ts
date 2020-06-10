@@ -10,6 +10,38 @@
  * ---------------------------------------------------------------
  */
 
+export interface AdministrativeIncident {
+  caseId?: string;
+  comment?: string;
+  dateOfIllness?: string;
+  dateOfReporting?: string;
+  eventDate: string;
+  eventType:
+    | "REGISTERED"
+    | "SUSPECTED"
+    | "ORDER_TEST"
+    | "SCHEDULED_FOR_TESTING"
+    | "TEST_SUBMITTED"
+    | "TEST_FINISHED_POSITIVE"
+    | "TEST_FINISHED_NEGATIVE"
+    | "PATIENT_DEAD"
+    | "DOCTORS_VISIT"
+    | "QUARANTINE_SELECTED"
+    | "QUARANTINE_MANDATED"
+    | "QUARANTINE_RELEASED"
+    | "QUARANTINE_PROFESSIONBAN_RELEASED"
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
+  id?: string;
+  illness?: "CORONA";
+  patient?: Patient;
+  responsibleDoctor?: Doctor;
+  symptoms?: string[];
+  versionTimestamp?: string;
+  versionUser?: User;
+}
+
 export type AggregationResultZip = object;
 
 export interface ApiFunctionSpec {
@@ -20,6 +52,10 @@ export interface ApiFunctionSpec {
 export interface AuthRequestDTO {
   password?: string;
   username?: string;
+}
+
+export interface BulkInsertOptions {
+  allowOverride?: boolean;
 }
 
 export interface ChangePasswordDTO {
@@ -45,16 +81,6 @@ export interface CreateInstitutionDTO {
   street?: string;
   user?: RegisterUserRequest;
   zip?: string;
-}
-
-export interface CreateLabTestDTO {
-  comment?: string;
-  eventDate?: string;
-  laboratoryId?: string;
-  patientId?: string;
-  testId?: string;
-  testMaterial?: "RACHENABSTRICH" | "NASENABSTRICH" | "VOLLBLUT";
-  testType?: "PCR" | "ANTIBODY";
 }
 
 export interface CreatePatientDTO {
@@ -83,19 +109,18 @@ export interface CreatePatientDTO {
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
     | "QUARANTINE_MANDATED"
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
   phoneNumber?: string;
   preIllnesses?: string[];
   quarantineUntil?: string;
@@ -135,6 +160,10 @@ export interface Doctor {
   zip?: string;
 }
 
+export interface ExceptionResponse {
+  message?: string;
+}
+
 export interface ExposureContactContactView {
   firstName?: string;
   id?: string;
@@ -165,29 +194,35 @@ export interface GrantedAuthority {
   authority?: string;
 }
 
-export interface Incident {
+export interface HealthInsuranceCompanies {
+  preDefined?: string[];
+  userDefined?: string[];
+}
+
+export interface HospitalizationIncident {
   caseId?: string;
-  eventDate?: string;
-  eventType?:
+  eventDate: string;
+  eventType:
     | "REGISTERED"
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
     | "QUARANTINE_MANDATED"
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
   id?: string;
+  intensiveCare?: boolean;
   patient?: Patient;
+  releasedOn?: string;
   versionTimestamp?: string;
   versionUser?: User;
 }
@@ -239,19 +274,8 @@ export interface InstitutionImpl {
   zip?: string;
 }
 
-export interface LabTest {
-  comment?: string;
-  id?: string;
-  lastUpdate?: string;
-  report?: string;
-  testId: string;
-  testMaterial?: "RACHENABSTRICH" | "NASENABSTRICH" | "VOLLBLUT";
-  testStatus?: "TEST_SUBMITTED" | "TEST_IN_PROGRESS" | "TEST_POSITIVE" | "TEST_NEGATIVE" | "TEST_INVALID";
-  testType?: "PCR" | "ANTIBODY";
-}
-
 export interface Laboratory {
-  assignedLabTest?: LabTest[];
+  assignedTestIncidents?: TestIncident[];
   city?: string;
   comment?: string;
   email?: string;
@@ -361,7 +385,6 @@ export interface Patient {
   dateOfIllness?: string;
   email?: string;
   employer?: string;
-  events?: PatientEvent[];
   firstName?: string;
   fluImmunization?: boolean;
   gender?: string;
@@ -373,24 +396,23 @@ export interface Patient {
   nationality?: string;
   occupation?: string;
   onIntensiveCareUnit?: boolean;
-  patientStatus?:
+  patientStatus:
     | "REGISTERED"
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
     | "QUARANTINE_MANDATED"
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
   phoneNumber?: string;
   preIllnesses?: string[];
   quarantineUntil?: string;
@@ -425,24 +447,29 @@ export interface PatientEvent {
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
     | "QUARANTINE_MANDATED"
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
   id?: string;
   illness?: "CORONA";
-  labTest?: LabTest;
   patient?: Patient;
   responsibleDoctor?: Doctor;
+}
+
+export interface PatientLogDto {
+  administrativeIncidents: AdministrativeIncident[];
+  hospitalizationIncidents: HospitalizationIncident[];
+  quarantineIncidents: QuarantineIncident[];
+  testIncidents: TestIncident[];
 }
 
 export interface PatientSearchParamsDTO {
@@ -467,31 +494,9 @@ export interface PatientSearchParamsDTO {
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
-    | "PATIENT_DEAD"
-    | "DOCTORS_VISIT"
-    | "QUARANTINE_SELECTED"
-    | "QUARANTINE_MANDATED"
-    | "QUARANTINE_RELEASED"
-    | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
-  phoneNumber?: string;
-  quarantineStatus?: Array<
-    | "REGISTERED"
-    | "SUSPECTED"
-    | "ORDER_TEST"
-    | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
-    | "TEST_FINISHED_POSITIVE"
-    | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
@@ -499,7 +504,27 @@ export interface PatientSearchParamsDTO {
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
     | "HOSPITALIZATION_MANDATED"
-  >;
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
+  phoneNumber?: string;
+  quarantineStatus?: (
+    | "REGISTERED"
+    | "SUSPECTED"
+    | "ORDER_TEST"
+    | "SCHEDULED_FOR_TESTING"
+    | "TEST_SUBMITTED"
+    | "TEST_FINISHED_POSITIVE"
+    | "TEST_FINISHED_NEGATIVE"
+    | "PATIENT_DEAD"
+    | "DOCTORS_VISIT"
+    | "QUARANTINE_SELECTED"
+    | "QUARANTINE_MANDATED"
+    | "QUARANTINE_RELEASED"
+    | "QUARANTINE_PROFESSIONBAN_RELEASED"
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED"
+  )[];
   street?: string;
   zip?: string;
 }
@@ -515,25 +540,24 @@ export interface PatientSimpleSearchParamsDTO {
 export interface QuarantineIncident {
   caseId?: string;
   comment?: string;
-  eventDate?: string;
-  eventType?:
+  eventDate: string;
+  eventType:
     | "REGISTERED"
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
     | "QUARANTINE_MANDATED"
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
   id?: string;
   patient?: Patient;
   until?: string;
@@ -564,24 +588,56 @@ export interface RequestQuarantineDTO {
     | "SUSPECTED"
     | "ORDER_TEST"
     | "SCHEDULED_FOR_TESTING"
-    | "TEST_SUBMITTED_IN_PROGRESS"
+    | "TEST_SUBMITTED"
     | "TEST_FINISHED_POSITIVE"
     | "TEST_FINISHED_NEGATIVE"
-    | "TEST_FINISHED_INVALID"
-    | "TEST_FINISHED_RECOVERED"
-    | "TEST_FINISHED_NOT_RECOVERED"
     | "PATIENT_DEAD"
     | "DOCTORS_VISIT"
     | "QUARANTINE_SELECTED"
     | "QUARANTINE_MANDATED"
     | "QUARANTINE_RELEASED"
     | "QUARANTINE_PROFESSIONBAN_RELEASED"
-    | "HOSPITALIZATION_MANDATED";
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
 }
 
 export interface SendToQuarantineDTO {
   eventDate?: string;
   patientIds?: string[];
+}
+
+export interface TestIncident {
+  caseId?: string;
+  comment?: string;
+  eventDate: string;
+  eventType:
+    | "REGISTERED"
+    | "SUSPECTED"
+    | "ORDER_TEST"
+    | "SCHEDULED_FOR_TESTING"
+    | "TEST_SUBMITTED"
+    | "TEST_FINISHED_POSITIVE"
+    | "TEST_FINISHED_NEGATIVE"
+    | "PATIENT_DEAD"
+    | "DOCTORS_VISIT"
+    | "QUARANTINE_SELECTED"
+    | "QUARANTINE_MANDATED"
+    | "QUARANTINE_RELEASED"
+    | "QUARANTINE_PROFESSIONBAN_RELEASED"
+    | "HOSPITALIZATION_MANDATED"
+    | "HOSPITALIZATION_RELEASED"
+    | "CASE_DATA_UPDATED";
+  id?: string;
+  laboratory?: Laboratory;
+  material?: "RACHENABSTRICH" | "NASENABSTRICH" | "VOLLBLUT";
+  patient?: Patient;
+  report?: string;
+  status?: "TEST_SUBMITTED" | "TEST_POSITIVE" | "TEST_NEGATIVE";
+  testId?: string;
+  type?: "PCR" | "ANTIBODY";
+  versionTimestamp?: string;
+  versionUser?: User;
 }
 
 export interface Timestamp {
@@ -599,14 +655,6 @@ export interface Timestamp {
 
 export interface TokenDTO {
   jwtToken?: string;
-}
-
-export interface UpdateTestStatusDTO {
-  comment?: string;
-  eventDate?: string;
-  file?: string;
-  status?: "TEST_SUBMITTED" | "TEST_IN_PROGRESS" | "TEST_POSITIVE" | "TEST_NEGATIVE" | "TEST_INVALID";
-  testId?: string;
 }
 
 export interface User {
@@ -644,13 +692,25 @@ export interface View {
   contentType?: string;
 }
 
+export interface BulkRequest_BulkInsertOptions_ExposureContactToServer_ {
+  items?: ExposureContactToServer[];
+  options?: BulkInsertOptions;
+}
+
+export interface ItemStatus_ExposureContactFromServer_string_string_ {
+  details?: "CREATE" | "OVERRIDE";
+  error?: string;
+  result?: ExposureContactFromServer;
+  success?: boolean;
+}
+
 export type Map_string_Link_ = Record<string, Link>;
 
 export type RequestParams = Omit<RequestInit, "body" | "method"> & {
   secure?: boolean;
 };
 
-export type RequestQueryParamsType = Record<string, string | string[] | number | number[] | boolean | undefined>;
+export type RequestQueryParamsType = Record<string | number, any>;
 
 type ApiConfig<SecurityDataType> = {
   baseUrl?: string;
@@ -658,8 +718,12 @@ type ApiConfig<SecurityDataType> = {
   securityWorker?: (securityData: SecurityDataType) => RequestParams;
 };
 
+const enum BodyType {
+  Json,
+}
+
 class HttpClient<SecurityDataType> {
-  public baseUrl: string = "//localhost/";
+  public baseUrl: string = "/v2/api-docs";
   private securityData: SecurityDataType = null as any;
   private securityWorker: ApiConfig<SecurityDataType>["securityWorker"] = (() => {}) as any;
 
@@ -684,17 +748,27 @@ class HttpClient<SecurityDataType> {
 
   private addQueryParam(query: RequestQueryParamsType, key: string) {
     return (
-      encodeURIComponent(key) +
-      "=" +
-      encodeURIComponent(Array.isArray(query[key]) ? (query[key] as any).join(",") : query[key])
+      encodeURIComponent(key) + "=" + encodeURIComponent(Array.isArray(query[key]) ? query[key].join(",") : query[key])
     );
   }
 
-  protected addQueryParams(query?: RequestQueryParamsType): string {
-    const fixedQuery = query || {};
-    const keys = Object.keys(fixedQuery).filter((key) => "undefined" !== typeof fixedQuery[key]);
-    return keys.length === 0 ? "" : `?${keys.map((key) => this.addQueryParam(fixedQuery, key)).join("&")}`;
+  protected addQueryParams(rawQuery?: RequestQueryParamsType): string {
+    const query = rawQuery || {};
+    const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
+    return keys.length
+      ? `?${keys
+          .map((key) =>
+            typeof query[key] === "object" && !Array.isArray(query[key])
+              ? this.addQueryParams(query[key] as object).substring(1)
+              : this.addQueryParam(query, key),
+          )
+          .join("&")}`
+      : "";
   }
+
+  private bodyFormatters: Record<BodyType, (input: any) => any> = {
+    [BodyType.Json]: JSON.stringify,
+  };
 
   private mergeRequestOptions(params: RequestParams, securityParams?: RequestParams): RequestParams {
     return {
@@ -720,13 +794,14 @@ class HttpClient<SecurityDataType> {
     method: string,
     { secure, ...params }: RequestParams = {},
     body?: any,
+    bodyType?: BodyType,
     secureByDefault?: boolean,
   ): Promise<T> =>
     fetch(`${this.baseUrl}${path}`, {
       // @ts-ignore
       ...this.mergeRequestOptions(params, (secureByDefault || secure) && this.securityWorker(this.securityData)),
       method,
-      body: body ? JSON.stringify(body) : null,
+      body: body ? this.bodyFormatters[bodyType || BodyType.Json](body) : null,
     }).then(async (response) => {
       const data = await this.safeParseResponse<T, E>(response);
       if (!response.ok) throw data;
@@ -737,7 +812,7 @@ class HttpClient<SecurityDataType> {
 /**
  * @title Api Documentation
  * @version 1.0
- * @baseUrl //localhost/
+ * @baseUrl /v2/api-docs
  * Api Documentation
  */
 export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
@@ -750,7 +825,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     linksUsingGet: (params?: RequestParams) =>
-      this.request<Record<string, Record<string, Link>>, any>(`/actuator`, "GET", params, null, true),
+      this.request<Record<string, Record<string, Link>>, any>(`/actuator`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags operation-handler
@@ -760,7 +835,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     handleUsingGet1: (body: Record<string, string>, params?: RequestParams) =>
-      this.request<AggregationResultZip, any>(`/actuator/health`, "GET", params, body, true),
+      this.request<AggregationResultZip, any>(`/actuator/health`, "GET", params, body, BodyType.Json, true),
 
     /**
      * @tags operation-handler
@@ -770,7 +845,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     handleUsingGet: (body: Record<string, string>, params?: RequestParams) =>
-      this.request<AggregationResultZip, any>(`/actuator/health/**`, "GET", params, body, true),
+      this.request<AggregationResultZip, any>(`/actuator/health/**`, "GET", params, body, BodyType.Json, true),
 
     /**
      * @tags operation-handler
@@ -780,7 +855,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     handleUsingGet2: (body: Record<string, string>, params?: RequestParams) =>
-      this.request<AggregationResultZip, any>(`/actuator/info`, "GET", params, body, true),
+      this.request<AggregationResultZip, any>(`/actuator/info`, "GET", params, body, BodyType.Json, true),
   };
   api = {
     /**
@@ -791,7 +866,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     signInUserUsingPost: (authRequestDTO: AuthRequestDTO, params?: RequestParams) =>
-      this.request<TokenDTO, any>(`/api/auth`, "POST", params, authRequestDTO, true),
+      this.request<TokenDTO, any>(`/api/auth`, "POST", params, authRequestDTO, BodyType.Json, true),
 
     /**
      * @tags auth-controller
@@ -801,7 +876,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getInstitutionUsingGet: (params?: RequestParams) =>
-      this.request<InstitutionDTO, any>(`/api/auth/institution`, "GET", params, null, true),
+      this.request<InstitutionDTO, any>(`/api/auth/institution`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags auth-controller
@@ -811,7 +886,14 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     registerInstitutionUsingPost: (institutionDTO: CreateInstitutionDTO, params?: RequestParams) =>
-      this.request<Institution, any>(`/api/auth/register/institution`, "POST", params, institutionDTO, true),
+      this.request<Institution, any>(
+        `/api/auth/register/institution`,
+        "POST",
+        params,
+        institutionDTO,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags auth-controller
@@ -821,7 +903,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     registerUserUsingPost: (registerUserRequest: RegisterUserRequest, params?: RequestParams) =>
-      this.request<User, any>(`/api/auth/register/user`, "POST", params, registerUserRequest, true),
+      this.request<User, any>(`/api/auth/register/user`, "POST", params, registerUserRequest, BodyType.Json, true),
 
     /**
      * @tags auth-controller
@@ -831,7 +913,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     currentUserUsingGet: (params?: RequestParams) =>
-      this.request<User, any>(`/api/auth/user`, "GET", params, null, true),
+      this.request<User, any>(`/api/auth/user`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags auth-controller
@@ -841,7 +923,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     changePasswordUsingPost: (changePasswordDTO: ChangePasswordDTO, params?: RequestParams) =>
-      this.request<any, any>(`/api/auth/user/change-password`, "POST", params, changePasswordDTO, true),
+      this.request<any, any>(`/api/auth/user/change-password`, "POST", params, changePasswordDTO, BodyType.Json, true),
 
     /**
      * @tags doctor-controller
@@ -851,7 +933,24 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     addScheduledEventUsingPost: (dto: RequestLabTestDTO, params?: RequestParams) =>
-      this.request<PatientEvent, any>(`/api/doctor/create_appointment`, "POST", params, dto, true),
+      this.request<PatientEvent, any>(`/api/doctor/create_appointment`, "POST", params, dto, BodyType.Json, true),
+
+    /**
+     * @tags enum-data-controller
+     * @name getHealthInsuranceCompaniesUsingGET
+     * @summary getHealthInsuranceCompanies
+     * @request GET:/api/enum-data/health-insurance-companies
+     * @secure
+     */
+    getHealthInsuranceCompaniesUsingGet: (params?: RequestParams) =>
+      this.request<HealthInsuranceCompanies, any>(
+        `/api/enum-data/health-insurance-companies`,
+        "GET",
+        params,
+        null,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags exposure-contact-controller
@@ -861,7 +960,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     createExposureContactUsingPost: (dto: ExposureContactToServer, params?: RequestParams) =>
-      this.request<ExposureContactFromServer, any>(`/api/exposure-contacts`, "POST", params, dto, true),
+      this.request<ExposureContactFromServer, any>(`/api/exposure-contacts`, "POST", params, dto, BodyType.Json, true),
 
     /**
      * @tags exposure-contact-controller
@@ -871,7 +970,31 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     updateExposureContactUsingPut: (contact: ExposureContactToServer, params?: RequestParams) =>
-      this.request<ExposureContactFromServer, any>(`/api/exposure-contacts`, "PUT", params, contact, true),
+      this.request<ExposureContactFromServer, any>(
+        `/api/exposure-contacts`,
+        "PUT",
+        params,
+        contact,
+        BodyType.Json,
+        true,
+      ),
+
+    /**
+     * @tags exposure-contact-controller
+     * @name bulkInsertUsingPOST
+     * @summary bulkInsert
+     * @request POST:/api/exposure-contacts/bulk
+     * @secure
+     */
+    bulkInsertUsingPost: (req: BulkRequest_BulkInsertOptions_ExposureContactToServer_, params?: RequestParams) =>
+      this.request<ItemStatus_ExposureContactFromServer_string_string_[], any>(
+        `/api/exposure-contacts/bulk`,
+        "POST",
+        params,
+        req,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags exposure-contact-controller
@@ -886,6 +1009,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         "POST",
         params,
         patientIds,
+        BodyType.Json,
         true,
       ),
 
@@ -902,6 +1026,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         "GET",
         params,
         null,
+        BodyType.Json,
         true,
       ),
 
@@ -918,6 +1043,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         "GET",
         params,
         null,
+        BodyType.Json,
         true,
       ),
 
@@ -929,7 +1055,14 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getExposureContactUsingGet: (id: number, params?: RequestParams) =>
-      this.request<ExposureContactFromServer, any>(`/api/exposure-contacts/${id}`, "GET", params, null, true),
+      this.request<ExposureContactFromServer, any>(
+        `/api/exposure-contacts/${id}`,
+        "GET",
+        params,
+        null,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags exposure-contact-controller
@@ -939,17 +1072,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     removeExposureContactUsingDelete: (id: number, params?: RequestParams) =>
-      this.request<any, any>(`/api/exposure-contacts/${id}`, "DELETE", params, null, true),
-
-    /**
-     * @tags incident-controller
-     * @name getPatientCurrentUsingGET
-     * @summary getPatientCurrent
-     * @request GET:/api/incidents/patient/{id}
-     * @secure
-     */
-    getPatientCurrentUsingGet: (id: string, params?: RequestParams) =>
-      this.request<Incident[], any>(`/api/incidents/patient/${id}`, "GET", params, null, true),
+      this.request<any, any>(`/api/exposure-contacts/${id}`, "DELETE", params, null, BodyType.Json, true),
 
     /**
      * @tags incident-controller
@@ -959,77 +1082,68 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getPatientLogUsingGet: (id: string, params?: RequestParams) =>
-      this.request<Incident[], any>(`/api/incidents/patient/${id}/log`, "GET", params, null, true),
+      this.request<PatientLogDto, any>(`/api/incidents/patient/${id}/log`, "GET", params, null, BodyType.Json, true),
 
     /**
-     * @tags incident-controller
+     * @tags quarantine-incident-controller
      * @name getSelectedForQuarantineUsingGET
      * @summary getSelectedForQuarantine
      * @request GET:/api/incidents/selected-for-quarantine
      * @secure
      */
     getSelectedForQuarantineUsingGet: (params?: RequestParams) =>
-      this.request<QuarantineIncident[], any>(`/api/incidents/selected-for-quarantine`, "GET", params, null, true),
+      this.request<QuarantineIncident[], any>(
+        `/api/incidents/selected-for-quarantine`,
+        "GET",
+        params,
+        null,
+        BodyType.Json,
+        true,
+      ),
 
     /**
-     * @tags incident-controller
-     * @name getIncidentUsingGET
-     * @summary getIncident
-     * @request GET:/api/incidents/{id}
+     * @tags test-incident-controller
+     * @name setTestUsingPOST
+     * @summary setTest
+     * @request POST:/api/incidents/test
      * @secure
      */
-    getIncidentUsingGet: (id: string, params?: RequestParams) =>
-      this.request<Incident, any>(`/api/incidents/${id}`, "GET", params, null, true),
+    setTestUsingPost: (test: TestIncident, params?: RequestParams) =>
+      this.request<TestIncident, ExceptionResponse>(`/api/incidents/test`, "POST", params, test, BodyType.Json, true),
 
     /**
-     * @tags incident-controller
-     * @name getLogUsingGET
-     * @summary getLog
-     * @request GET:/api/incidents/{id}/log
-     * @secure
-     */
-    getLogUsingGet: (id: string, params?: RequestParams) =>
-      this.request<Incident[], any>(`/api/incidents/${id}/log`, "GET", params, null, true),
-
-    /**
-     * @tags incident-controller
+     * @tags test-incident-controller
      * @name getPatientsCurrentByTypeUsingPOST
      * @summary getPatientsCurrentByType
-     * @request POST:/api/incidents/{type}/patient
+     * @request POST:/api/incidents/test/patient
      * @secure
      */
-    getPatientsCurrentByTypeUsingPost: (
-      type: "test" | "quarantine" | "administrative",
-      patientIds: string[],
-      params?: RequestParams,
-    ) =>
-      this.request<Record<string, Incident[]>, any>(`/api/incidents/${type}/patient`, "POST", params, patientIds, true),
+    getPatientsCurrentByTypeUsingPost: (patientIds: string[], params?: RequestParams) =>
+      this.request<Record<string, TestIncident[]>, any>(
+        `/api/incidents/test/patient`,
+        "POST",
+        params,
+        patientIds,
+        BodyType.Json,
+        true,
+      ),
 
     /**
-     * @tags incident-controller
-     * @name getPatientCurrentByTypeUsingGET
-     * @summary getPatientCurrentByType
-     * @request GET:/api/incidents/{type}/patient/{id}
+     * @tags test-incident-controller
+     * @name setTestByTestAndLabIdUsingPOST
+     * @summary setTestByTestAndLabId
+     * @request POST:/api/incidents/test/test-id
      * @secure
      */
-    getPatientCurrentByTypeUsingGet: (
-      id: string,
-      type: "test" | "quarantine" | "administrative" | "hospitalization",
-      params?: RequestParams,
-    ) => this.request<Incident[], any>(`/api/incidents/${type}/patient/${id}`, "GET", params, null, true),
-
-    /**
-     * @tags incident-controller
-     * @name getPatientLogByTypeUsingGET
-     * @summary getPatientLogByType
-     * @request GET:/api/incidents/{type}/patient/{id}/log
-     * @secure
-     */
-    getPatientLogByTypeUsingGet: (
-      id: string,
-      type: "test" | "quarantine" | "administrative" | "hospitalization",
-      params?: RequestParams,
-    ) => this.request<Incident[], any>(`/api/incidents/${type}/patient/${id}/log`, "GET", params, null, true),
+    setTestByTestAndLabIdUsingPost: (test: TestIncident, params?: RequestParams) =>
+      this.request<TestIncident, ExceptionResponse>(
+        `/api/incidents/test/test-id`,
+        "POST",
+        params,
+        test,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags institution-controller
@@ -1039,7 +1153,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     createInstitutionUsingPost: (createInstitutionDTO: CreateInstitutionDTO, params?: RequestParams) =>
-      this.request<InstitutionDTO, any>(`/api/institutions`, "POST", params, createInstitutionDTO, true),
+      this.request<InstitutionDTO, any>(`/api/institutions`, "POST", params, createInstitutionDTO, BodyType.Json, true),
 
     /**
      * @tags institution-controller
@@ -1049,7 +1163,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     updateInstitutionUsingPut: (institutionDTO: InstitutionDTO, params?: RequestParams) =>
-      this.request<InstitutionDTO, any>(`/api/institutions`, "PUT", params, institutionDTO, true),
+      this.request<InstitutionDTO, any>(`/api/institutions`, "PUT", params, institutionDTO, BodyType.Json, true),
 
     /**
      * @tags institution-controller
@@ -1059,7 +1173,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getAllDoctorsUsingGet: (params?: RequestParams) =>
-      this.request<Doctor[], any>(`/api/institutions/doctors`, "GET", params, null, true),
+      this.request<Doctor[], any>(`/api/institutions/doctors`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags institution-controller
@@ -1069,7 +1183,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getAllLaboratoriesUsingGet: (params?: RequestParams) =>
-      this.request<Laboratory[], any>(`/api/institutions/laboratories`, "GET", params, null, true),
+      this.request<Laboratory[], any>(`/api/institutions/laboratories`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags institution-controller
@@ -1084,48 +1198,9 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         "GET",
         params,
         null,
+        BodyType.Json,
         true,
       ),
-
-    /**
-     * @tags lab-test-controller
-     * @name createTestForPatientUsingPOST
-     * @summary createTestForPatient
-     * @request POST:/api/labtests
-     * @secure
-     */
-    createTestForPatientUsingPost: (createLabTestRequest: CreateLabTestDTO, params?: RequestParams) =>
-      this.request<LabTest, any>(`/api/labtests`, "POST", params, createLabTestRequest, true),
-
-    /**
-     * @tags lab-test-controller
-     * @name getLabTestForPatientUsingGET
-     * @summary getLabTestForPatient
-     * @request GET:/api/labtests/patient/{id}
-     * @secure
-     */
-    getLabTestForPatientUsingGet: (id: string, params?: RequestParams) =>
-      this.request<LabTest[], any>(`/api/labtests/patient/${id}`, "GET", params, null, true),
-
-    /**
-     * @tags lab-test-controller
-     * @name queryLabTestsByIdUsingGET
-     * @summary queryLabTestsById
-     * @request GET:/api/labtests/query
-     * @secure
-     */
-    queryLabTestsByIdUsingGet: (query: { labTestIdQuery: string }, params?: RequestParams) =>
-      this.request<LabTest[], any>(`/api/labtests/query${this.addQueryParams(query)}`, "GET", params, null, true),
-
-    /**
-     * @tags lab-test-controller
-     * @name updateTestStatusUsingPUT
-     * @summary updateTestStatus
-     * @request PUT:/api/labtests/{laboratoryId}
-     * @secure
-     */
-    updateTestStatusUsingPut: (laboratoryId: string, statusDTO: UpdateTestStatusDTO, params?: RequestParams) =>
-      this.request<LabTest, any>(`/api/labtests/${laboratoryId}`, "PUT", params, statusDTO, true),
 
     /**
      * @tags patient-controller
@@ -1135,7 +1210,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getAllPatientsUsingGet: (params?: RequestParams) =>
-      this.request<Patient[], any>(`/api/patients`, "GET", params, null, true),
+      this.request<Patient[], any>(`/api/patients`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1145,7 +1220,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     addPatientUsingPost: (dto: CreatePatientDTO, params?: RequestParams) =>
-      this.request<Patient, any>(`/api/patients`, "POST", params, dto, true),
+      this.request<Patient, any>(`/api/patients`, "POST", params, dto, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1155,7 +1230,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     updatePatientUsingPut: (patient: Patient, params?: RequestParams) =>
-      this.request<Patient, any>(`/api/patients`, "PUT", params, patient, true),
+      this.request<Patient, any>(`/api/patients`, "PUT", params, patient, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1170,6 +1245,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         "POST",
         params,
         null,
+        BodyType.Json,
         true,
       ),
 
@@ -1181,7 +1257,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     sendToQuarantineUsingPost: (dto: SendToQuarantineDTO, params?: RequestParams) =>
-      this.request<any, any>(`/api/patients/quarantine`, "POST", params, dto, true),
+      this.request<any, any>(`/api/patients/quarantine`, "POST", params, dto, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1191,7 +1267,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     requestQuarantineUsingPost: (id: string, statusDTO: RequestQuarantineDTO, params?: RequestParams) =>
-      this.request<Patient, any>(`/api/patients/quarantine/${id}`, "POST", params, statusDTO, true),
+      this.request<Patient, any>(`/api/patients/quarantine/${id}`, "POST", params, statusDTO, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1201,7 +1277,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     queryPatientsUsingPost: (patientSearchParamsDTO: PatientSearchParamsDTO, params?: RequestParams) =>
-      this.request<Patient[], any>(`/api/patients/query`, "POST", params, patientSearchParamsDTO, true),
+      this.request<Patient[], any>(`/api/patients/query`, "POST", params, patientSearchParamsDTO, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1211,7 +1287,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     queryPatientsSimpleUsingPost: (query: PatientSimpleSearchParamsDTO, params?: RequestParams) =>
-      this.request<Patient[], any>(`/api/patients/query-simple`, "POST", params, query, true),
+      this.request<Patient[], any>(`/api/patients/query-simple`, "POST", params, query, BodyType.Json, true),
 
     /**
      * @tags patient-controller
@@ -1226,6 +1302,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         "GET",
         params,
         null,
+        BodyType.Json,
         true,
       ),
 
@@ -1237,7 +1314,14 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     countQueryPatientsUsingPost: (patientSearchParamsDTO: PatientSearchParamsDTO, params?: RequestParams) =>
-      this.request<number, any>(`/api/patients/query/count`, "POST", params, patientSearchParamsDTO, true),
+      this.request<number, any>(
+        `/api/patients/query/count`,
+        "POST",
+        params,
+        patientSearchParamsDTO,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags patient-controller
@@ -1247,7 +1331,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getPatientForIdUsingGet: (id: string, params?: RequestParams) =>
-      this.request<Patient, any>(`/api/patients/${id}`, "GET", params, null, true),
+      this.request<Patient, any>(`/api/patients/${id}`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags permission-query-controller
@@ -1257,7 +1341,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     queryPermissionsUsingPost: (items: Record<string, ApiFunctionSpec>, params?: RequestParams) =>
-      this.request<Record<string, boolean>, any>(`/api/permissions`, "POST", params, items, true),
+      this.request<Record<string, boolean>, any>(`/api/permissions`, "POST", params, items, BodyType.Json, true),
 
     /**
      * @tags stats-controller
@@ -1267,7 +1351,14 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getForZipUsingGet: (query: { lowerBoundsZip: string; upperBoundsZips: string }, params?: RequestParams) =>
-      this.request<AggregationResultZip[], any>(`/api/stats${this.addQueryParams(query)}`, "GET", params, null, true),
+      this.request<AggregationResultZip[], any>(
+        `/api/stats${this.addQueryParams(query)}`,
+        "GET",
+        params,
+        null,
+        BodyType.Json,
+        true,
+      ),
 
     /**
      * @tags user-controller
@@ -1277,7 +1368,7 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     getInstitutionUsersUsingGet: (params?: RequestParams) =>
-      this.request<UserDTO[], any>(`/api/users`, "GET", params, null, true),
+      this.request<UserDTO[], any>(`/api/users`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags user-controller
@@ -1296,7 +1387,8 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
         username?: string;
       },
       params?: RequestParams,
-    ) => this.request<UserDTO, any>(`/api/users${this.addQueryParams(query)}`, "PUT", params, null, true),
+    ) =>
+      this.request<UserDTO, any>(`/api/users${this.addQueryParams(query)}`, "PUT", params, null, BodyType.Json, true),
 
     /**
      * @tags user-controller
@@ -1306,77 +1398,77 @@ export class Api<SecurityDataType = any> extends HttpClient<SecurityDataType> {
      * @secure
      */
     deleteInstitutionUserUsingDelete: (id: number, params?: RequestParams) =>
-      this.request<any, any>(`/api/users/${id}`, "DELETE", params, null, true),
+      this.request<any, any>(`/api/users/${id}`, "DELETE", params, null, BodyType.Json, true),
   };
   error = {
     /**
      * @tags basic-error-controller
-     * @name errorUsingGET
-     * @summary error
+     * @name errorHtmlUsingGET
+     * @summary errorHtml
      * @request GET:/error
      * @secure
      */
-    errorUsingGet: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "GET", params, null, true),
+    errorHtmlUsingGet: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "GET", params, null, BodyType.Json, true),
 
     /**
      * @tags basic-error-controller
-     * @name errorUsingHEAD
-     * @summary error
+     * @name errorHtmlUsingHEAD
+     * @summary errorHtml
      * @request HEAD:/error
      * @secure
      */
-    errorUsingHead: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "HEAD", params, null, true),
+    errorHtmlUsingHead: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "HEAD", params, null, BodyType.Json, true),
 
     /**
      * @tags basic-error-controller
-     * @name errorUsingPOST
-     * @summary error
+     * @name errorHtmlUsingPOST
+     * @summary errorHtml
      * @request POST:/error
      * @secure
      */
-    errorUsingPost: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "POST", params, null, true),
+    errorHtmlUsingPost: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "POST", params, null, BodyType.Json, true),
 
     /**
      * @tags basic-error-controller
-     * @name errorUsingPUT
-     * @summary error
+     * @name errorHtmlUsingPUT
+     * @summary errorHtml
      * @request PUT:/error
      * @secure
      */
-    errorUsingPut: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "PUT", params, null, true),
+    errorHtmlUsingPut: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "PUT", params, null, BodyType.Json, true),
 
     /**
      * @tags basic-error-controller
-     * @name errorUsingDELETE
-     * @summary error
+     * @name errorHtmlUsingDELETE
+     * @summary errorHtml
      * @request DELETE:/error
      * @secure
      */
-    errorUsingDelete: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "DELETE", params, null, true),
+    errorHtmlUsingDelete: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "DELETE", params, null, BodyType.Json, true),
 
     /**
      * @tags basic-error-controller
-     * @name errorUsingOPTIONS
-     * @summary error
+     * @name errorHtmlUsingOPTIONS
+     * @summary errorHtml
      * @request OPTIONS:/error
      * @secure
      */
-    errorUsingOptions: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "OPTIONS", params, null, true),
+    errorHtmlUsingOptions: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "OPTIONS", params, null, BodyType.Json, true),
 
     /**
      * @tags basic-error-controller
-     * @name errorUsingPATCH
-     * @summary error
+     * @name errorHtmlUsingPATCH
+     * @summary errorHtml
      * @request PATCH:/error
      * @secure
      */
-    errorUsingPatch: (params?: RequestParams) =>
-      this.request<Record<string, object>, any>(`/error`, "PATCH", params, null, true),
+    errorHtmlUsingPatch: (params?: RequestParams) =>
+      this.request<ModelAndView, any>(`/error`, "PATCH", params, null, BodyType.Json, true),
   };
 }
