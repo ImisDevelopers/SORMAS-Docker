@@ -5,7 +5,7 @@ services:
     labels:
       - autoheal=true
         # override for stop timeout seconds during restart
-      - autoheal.stop.timeout=30
+      - autoheal.stop.timeout=60
     links:
       - postgres
     image: hzibraunschweig/sormas-application:${SORMAS_DOCKER_VERSION}
@@ -39,7 +39,7 @@ services:
     mem_reservation: ${APPSERVER_MEM_RESERVED}
     healthcheck:
       test: ["CMD", "curl", "-f", "-I", "http://localhost:6080"]
-      interval: 30s
+      interval: 60s
       timeout: 3s
       retries: 3
       start_period: 300s
