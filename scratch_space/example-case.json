@@ -1,0 +1,27 @@
+[
+  {
+    "creationDate": "2020-06-10T14:17:23.753Z",
+    "changeDate": "2020-06-10T14:17:23.753Z",
+    "uuid": "adf730d5-fb2c-40d3-85cf-da4098311809",
+    "disease": "CORONAVIRUS",
+    "person": {
+      "uuid": "0df730d5-fb2c-40d3-85cf-da4098311809"
+    },
+    "reportDate": "2020-06-10T14:17:23.753Z",
+    "caseClassification": "PROBABLE",
+    "investigationStatus": "PENDING",
+    "region": {
+      "uuid": "QO4WZB-I7RXPT-WO5AUZ-YMPUSIGA",
+      "caption": "string"
+    },
+    "district": {
+      "uuid": "UEOTJU-WHEYLI-YAR3UM-Z7B7KIX4"
+    },
+    "healthFacility": {
+      "uuid": "V7Y5ZC-57S6H7-HM2OV3-2EBSKNZ4"
+    },
+    "reportingUser": {
+      "uuid": "QCDLPO-TQXNYD-ZK3C7D-77RCSMU4"
+    }
+  }
+]
