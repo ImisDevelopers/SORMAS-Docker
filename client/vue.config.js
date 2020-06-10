@@ -1,7 +1,6 @@
 module.exports = {
+  publicPath: '/imis/',
   devServer: {
-    proxy: 'http://sormas/sormas-rest:80',
-    publicPath: '/imis/',
     public: 'sormas-docker-test.com'
   },
 }
