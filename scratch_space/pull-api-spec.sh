@@ -1,0 +1,2 @@
+curl -k --user SurvOff:SurvOff 'https://sormas-docker-test.com/sormas-rest/application.wadl?detail=true' > sormas-api-detailed.xml && \
+curl -k --user SurvOff:SurvOff 'https://sormas-docker-test.com/sormas-rest/application.wadl' > sormas-api.xml

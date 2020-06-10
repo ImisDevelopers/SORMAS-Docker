@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<application xmlns="http://wadl.dev.java.net/2009/02">
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.29.payara-p2 2019-05-15 15:12:36"/>
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: https://sormas-docker-test.com/sormas-rest/application.wadl?detail=true"/>
+    <grammars/>
+    <resources base="https://sormas-docker-test.com/sormas-rest/">
+        <resource path="/userroles">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/featureconfigurations">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllFeatureConfigurations" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/samples">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query/cases">
+                <method id="getByCaseUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllSamples" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postSamples" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/events">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/archived/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getArchivedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllEvents" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postEvents" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/outbreaks">
+            <resource path="/active/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getActiveSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/inactive/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getInactiveUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/classification">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/persons">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllPersons" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postPersons" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/facilities">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/region/{regionUuid}/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="regionUuid" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllByRegion" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/general/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllWithoutRegion" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/infrastructure">
+            <resource path="/sync">
+                <method id="getInfrastructureSyncData" name="POST">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/pointsofentry">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/clinicalvisits">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postVisits" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllVisits" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/treatments">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllTreatments" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postTreatments" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/aggregatereports">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postAggregateReports" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllAggregateReports" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/info">
+            <resource path="/locale">
+                <method id="getLocale" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/appurl">
+                <method id="getAppUrl" name="GET">
+                    <request>
+                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="appVersion" style="query" type="xs:string"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/checkcompatibility">
+                <method id="isCompatibleToApi" name="GET">
+                    <request>
+                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="appVersion" style="query" type="xs:string"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/version">
+                <method id="getVersion" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/visits-external">
+            <resource path="/person/{personUuid}/isValid">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="personUuid" style="template" type="xs:string"/>
+                <method id="isValidPersonUuid" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/">
+                <method id="postExternalVisits" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/version">
+                <method id="getVersion" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/diseaseconfigurations">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllDiseaseConfigurations" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/pathogentests">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query/samples">
+                <method id="getBySampleUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllPathogenTests" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postPathogenTests" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/cases">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/archived/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getArchivedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllCases" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postCases" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/weeklyreports">
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllWeeklyReports" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postWeeklyReports" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/regions">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/users">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/visits">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postVisits" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllVisits" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/additionaltests">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllAdditionalTests" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postAdditionalTests" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/eventparticipants">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllEventParticipantsAfter" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postEventParticipants" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/communities">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/prescriptions">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllPrescriptions" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postPrescriptions" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/tasks">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postTasks" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/districts">
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAll" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+        <resource path="/contacts">
+            <resource path="/query">
+                <method id="getByUuids" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/uuids">
+                <method id="getAllActiveUuids" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/deleted/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getDeletedUuidsSince" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/all/{since}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="since" style="template" type="xs:long"/>
+                <method id="getAllContacts" name="GET">
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="/push">
+                <method id="postContacts" name="POST">
+                    <request>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </request>
+                    <response>
+                        <representation mediaType="application/json;charset=UTF-8"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+    </resources>
+</application>
