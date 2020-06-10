@@ -39,6 +39,10 @@ Listen 443
 
         ProxyRequests Off
         ProxyPreserveHost On
+
+        ProxyPass /imis http://imis:8080/ connectiontimeout=5 timeout=600
+        ProxyPassReverse /imis http://imis:8080/
+
         ProxyPass /sormas-ui http://sormas:6080/sormas-ui connectiontimeout=5 timeout=600
         ProxyPassReverse /sormas-ui http://sormas:6080/sormas-ui
         ProxyPass /sormas-rest http://sormas:6080/sormas-rest connectiontimeout=5 timeout=600
