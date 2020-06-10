@@ -27,9 +27,7 @@ def main():
     person["lastName"] = "last2"
 
     payload = [person]
-    with open('example-person.json','w') as f:
-        json.dump(payload,f)
-    return
+
     p = s.post(rest + '/persons/push', json=payload)
     print(p.text)
 
