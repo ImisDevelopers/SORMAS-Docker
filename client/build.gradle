@@ -44,7 +44,7 @@ task serve(type: YarnTask) {
 }
 
 task generateClient(type: NpxTask) {
-  def swaggerConfigPath = "../server/build/resources/swagger.json"
+  def swaggerConfigPath = "sormas-swagger.json"
   setDescription "Generate Swagger API client from Swagger config at ${swaggerConfigPath}."
   inputs.file(swaggerConfigPath)
   outputs.file('src/api/SwaggerApi.ts')
