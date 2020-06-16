@@ -1,12 +1,14 @@
 {
+  "firstName": "Firstname",
+  "gender": "male",
+  "lastName": "Lastname",
+  "dateOfBirth": "1980-04-23",
+
   "city": "Cologne",
   "coronaContacts": false,
   "country": "Deutschland",
-  "dateOfBirth": "1980-04-23",
-  "firstName": "Firstname",
+
   "fluImmunization": false,
-  "gender": "male",
-  "lastName": "Lastname",
   "nationality": "deutsch",
   "patientStatus": "REGISTERED",
   "preIllnesses": [

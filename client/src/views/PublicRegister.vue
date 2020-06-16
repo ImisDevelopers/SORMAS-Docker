@@ -453,13 +453,20 @@
                     const personUuid = uuidv4()
                     const caseUuid = uuidv4()
 
+                    const birthDate = request.dateOfBirth.split('-')
+
                     const apiPerson: PersonDto = {
-                        firstName: request.firstName,
-                        lastName: request.lastName,
                         creationDate: now,
                         changeDate: now,
                         uuid: personUuid,
-                        sex
+
+                        firstName: request.firstName,
+                        lastName: request.lastName,
+                        sex: request.gender.toUpperCase(),
+
+                        birthdateDD: birthDate[0],
+                        birthdateMM: birthDate[1],
+                        birthdateYYYY: birthDate[2]
                     }
 
 
