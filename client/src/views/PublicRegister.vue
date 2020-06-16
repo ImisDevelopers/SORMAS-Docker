@@ -13,8 +13,7 @@
                 >
                     <a-button type="primary" icon="home" :ghost="true" @click="gotoHome"
                     >Zur Startseite
-                    </a-button
-                    >
+                    </a-button>
                 </div>
                 <div
                         style="display: flex; align-items: center; justify-content: center;"
@@ -133,8 +132,7 @@
                                     >
                                         <a-checkbox v-model="showOtherPreIllnesses"
                                         >Andere:
-                                        </a-checkbox
-                                        >
+                                        </a-checkbox>
                                         <a-form-item style="flex: 1 1 100%; margin-bottom: 0;">
                                             <a-input
                                                     :disabled="!showOtherPreIllnesses"
@@ -203,12 +201,10 @@
                                 />
                                 <span>Sie erhalten in Kürze eine Email zur Bestätigung.</span>
                             </div>
-                            <a-button type="primary" @click="gotoHome"
-                            >
+                            <a-button type="primary" @click="gotoHome">
                                 <a-icon type="home"/>
                                 Zur Startseite
-                            </a-button
-                            >
+                            </a-button>
                         </div>
                     </div>
                 </a-form>
@@ -279,13 +275,14 @@
 
 <script lang="ts">
     import Vue from 'vue'
-    import Api from '@/api'
     import {Patient} from '@/api/ImisSwaggerApi'
     import {Option} from '@/models'
     import {SYMPTOMS} from '@/models/symptoms'
     import {PRE_ILLNESSES} from '@/models/pre-illnesses'
     import PatientStammdaten from '@/components/form-groups/PatientStammdaten.vue'
     import {EXPOSURE_LOCATIONS, EXPOSURES_PUBLIC} from '@/models/exposures'
+    import {CaseDataDto, PersonDto, RequestParams, SormasSwaggerApi} from '@/api/SormasSwaggerApi'
+
 
     interface State {
         form: any
@@ -358,16 +355,16 @@
                 anchor.scrollIntoView()
 
                 /*
-                // Scroll all parents
-                let currElem: Element = scrollAnchor
-                let container: Element | null = currElem.parentElement
-                while (container) {
-                  container.scrollTo({ top: currElem.offsetY })
+                          // Scroll all parents
+                          let currElem: Element = scrollAnchor
+                          let container: Element | null = currElem.parentElement
+                          while (container) {
+                            container.scrollTo({ top: currElem.offsetY })
 
-                  currElem = container
-                  container = currElem.parentElement
-                }
-                */
+                            currElem = container
+                            container = currElem.parentElement
+                          }
+                          */
             },
             prev() {
                 this.current--
@@ -394,7 +391,7 @@
                     this.showCheckedError = true
                     return
                 }
-                this.form.validateFields((err: any, values: any) => {
+                this.form.validateFields(async (err: any, values: any) => {
                     if (err) {
                         console.error(err)
                         return
@@ -438,87 +435,79 @@
                         .find((riskArea: string) =>
                             riskArea.startsWith('CONTACT_WITH_CORONA')
                         )
+
                     // ==== SORMAS POST ====
-                    console.log("Here we go=============================")
-                    const now = new Date().toISOString().split('.')[0];
+                    const now = new Date().toISOString().split('.')[0]
 
                     function uuidv4() {
-                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                            return v.toString(16);
-                        });
+                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+                            /[xy]/g,
+                            function (c) {
+                                const r = (Math.random() * 16) | 0,
+                                    v = c == 'x' ? r : (r & 0x3) | 0x8
+                                return v.toString(16)
+                            }
+                        )
                     }
 
                     const personUuid = uuidv4()
                     const caseUuid = uuidv4()
 
-                    const person = {
-                        method: "POST",
+                    const apiPerson: PersonDto = {
+                        firstName: request.firstName,
+                        lastName: request.lastName,
+                        creationDate: now,
+                        changeDate: now,
+                        uuid: personUuid,
+                        sex
+                    }
+
+
+                    const apiCase: CaseDataDto = {
+                        creationDate: now,
+                        changeDate: now,
+                        uuid: caseUuid,
+                        disease: "CORONAVIRUS",
+                        person: {
+                            uuid: personUuid
+                        },
+                        reportDate: now,
+                        caseClassification: "NOT_CLASSIFIED",
+                        investigationStatus: "PENDING",
+                        region: {
+                            uuid: "SXAJMX-GJU72R-POK2TS-VR7NKGHY",
+                        },
+                        district: {
+                            uuid: "UCS4I7-ZGJHFO-X4RRTG-5DXO2BN4"
+                        },
+                        healthFacility: {
+                            uuid: "W7EFRL-NADHDB-MK4PZ3-6DFIKGRY"
+                        },
+                        reportingUser: {
+                            uuid: "XZUG2B-SWS5CB-SMNI4T-WZOECAZQ"
+                        }
+                    };
+
+                    const headers: RequestParams = {
                         headers: {
                             "Content-Type": "application/json",
                             'Authorization': 'Basic ' + btoa('SurvOff:SurvOff')
                         },
-                        body: JSON.stringify([{
-                                firstName: request.firstName,
-                                lastName: request.lastName,
-                                creationDate: now,
-                                changeDate: now,
-                                uuid: personUuid,
-                            }]
-                        )
+
                     };
 
-                    const caze = {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            'Authorization': 'Basic ' + btoa('SurvOff:SurvOff')
-                        },
-                        body: JSON.stringify([{
-                                creationDate: now,
-                                changeDate: now,
-                                uuid: caseUuid,
-                                disease: "CORONAVIRUS",
-                                person: {
-                                    uuid: personUuid
-                                },
-                                reportDate: now,
-                                caseClassification: "PROBABLE",
-                                investigationStatus: "PENDING",
-                                region: {
-                                    uuid: "SXAJMX-GJU72R-POK2TS-VR7NKGHY",
-                                },
-                                district: {
-                                    uuid: "UCS4I7-ZGJHFO-X4RRTG-5DXO2BN4"
-                                },
-                                "healthFacility": {
-                                    uuid: "W7EFRL-NADHDB-MK4PZ3-6DFIKGRY"
-                                },
-                                reportingUser: {
-                                    uuid: "XZUG2B-SWS5CB-SMNI4T-WZOECAZQ"
-                                }
-                            }]
-                        )
-                    };
-
-                    const rest: String = 'https://sormas-docker-test.com/sormas-rest/'
-
-                    fetch(rest + "/persons/push/", person)
-                        .then(function (response) {
-                            console.log(person)
-                            console.log(response)
-                        }).then(function (fulfilled) {
-                        fetch(rest + "/cases/push/", caze)
-                            .then(function (response) {
-                                console.log(caze)
-                                console.log(response)
-                                console.log("Finish=============================")
-                            })
-
-                    })
-
-
-
+                    let sormasSwaggerApi: SormasSwaggerApi = new SormasSwaggerApi<any>();
+                    sormasSwaggerApi.persons
+                        .postPersons([apiPerson], headers)
+                        .then(function (r) {
+                            console.log("Posted person: " + r)
+                        })
+                        .then(function (r) {
+                            sormasSwaggerApi.cases.postCases([apiCase], headers)
+                        })
+                        .then(function (r) {
+                            console.log("Posted case: " + r)
+                        })
                 })
             },
             onCheckedChange(e: Event) {

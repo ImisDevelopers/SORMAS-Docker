@@ -1,0 +1,1 @@
+creationDate and changeDate in CaseDateDTO are not required
