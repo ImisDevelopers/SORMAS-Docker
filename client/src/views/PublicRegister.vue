@@ -438,6 +438,7 @@
                         .find((riskArea: string) =>
                             riskArea.startsWith('CONTACT_WITH_CORONA')
                         )
+                    // ==== SORMAS POST ====
                     console.log("Here we go=============================")
                     const now = new Date().toISOString().split('.')[0];
 
@@ -449,6 +450,7 @@
                     }
 
                     const personUuid = uuidv4()
+                    const caseUuid = uuidv4()
 
                     const person = {
                         method: "POST",
@@ -465,16 +467,6 @@
                             }]
                         )
                     };
-
-                    const rest: String = 'https://sormas-docker-test.com/sormas-rest/'
-
-                    fetch(rest + "/persons/push/", person)
-                        .then(function (response) {
-                            console.log(person)
-                            console.log(response)
-                        })
-
-                    const caseUuid = uuidv4()
 
                     const caze = {
                         method: "POST",
@@ -494,28 +486,39 @@
                                 caseClassification: "PROBABLE",
                                 investigationStatus: "PENDING",
                                 region: {
-                                    uuid: "TLOTPZ-S24Z5L-325WIE-O65H2HUA",
+                                    uuid: "SXAJMX-GJU72R-POK2TS-VR7NKGHY",
                                 },
                                 district: {
-                                    uuid: "UZ5SRP-IRJDEB-GN72MI-GXDPKGEU"
+                                    uuid: "UCS4I7-ZGJHFO-X4RRTG-5DXO2BN4"
                                 },
                                 "healthFacility": {
-                                    uuid: "WUFNSA-IC6RGG-65AE4F-HGNZSLDM"
+                                    uuid: "W7EFRL-NADHDB-MK4PZ3-6DFIKGRY"
                                 },
                                 reportingUser: {
-                                    uuid: "SC7GAY-SRTPO2-OQ4IEW-ZNZUSGC4"
+                                    uuid: "XZUG2B-SWS5CB-SMNI4T-WZOECAZQ"
                                 }
                             }]
                         )
                     };
 
-                    fetch(rest + "/cases/push/", caze)
-                        .then(function (response) {
-                            console.log(caze)
-                            console.log(response)
-                        })
+                    const rest: String = 'https://sormas-docker-test.com/sormas-rest/'
 
-                    console.log("Finish=============================")
+                    fetch(rest + "/persons/push/", person)
+                        .then(function (response) {
+                            console.log(person)
+                            console.log(response)
+                        }).then(function (fulfilled) {
+                        fetch(rest + "/cases/push/", caze)
+                            .then(function (response) {
+                                console.log(caze)
+                                console.log(response)
+                                console.log("Finish=============================")
+                            })
+
+                    })
+
+
+
                 })
             },
             onCheckedChange(e: Event) {
