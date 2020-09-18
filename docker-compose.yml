@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     labels:
       - autoheal=true
-        # override for stop timeout seconds during restart
+      # override for stop timeout seconds during restart
       - autoheal.stop.timeout=30
     links:
       - postgres
@@ -47,7 +47,7 @@ services:
     mem_limit: ${APPSERVER_MEM}
     mem_reservation: ${APPSERVER_MEM_RESERVED}
     healthcheck:
-      test: ["CMD", "curl", "-f", "-I", "http://localhost:6080/sormas-ui/login"]
+      test: [ "CMD", "curl", "-f", "-I", "http://localhost:6080/sormas-ui/login" ]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -77,7 +77,7 @@ services:
     mem_limit: ${DB_MEM}
     mem_reservation: ${DB_MEM_RESERVED}
     healthcheck:
-      test: ["CMD", "psql", "-U", "${SORMAS_POSTGRES_USER}", "-c", "SELECT 1;", "${DB_NAME}"]
+      test: [ "CMD", "psql", "-U", "${SORMAS_POSTGRES_USER}", "-c", "SELECT 1;", "${DB_NAME}" ]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -126,7 +126,7 @@ services:
     mem_limit: ${WEBSERVER_MEM}
     mem_reservation: ${WEBSERVER_MEM_RESERVED}
     healthcheck:
-      test: ["CMD", "curl", "-f", "-I", "-k", "--resolve", "${SORMAS_SERVER_URL}:443:127.0.0.1", "https://${SORMAS_SERVER_URL}/downloads/"]
+      test: [ "CMD", "curl", "-f", "-I", "-k", "--resolve", "${SORMAS_SERVER_URL}:443:127.0.0.1", "https://${SORMAS_SERVER_URL}/downloads/" ]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -139,17 +139,28 @@ services:
     restart: unless-stopped
     image: willfarrell/autoheal
     environment:
-        # watch all running containers.
+      # watch all running containers.
       - AUTOHEAL_CONTAINER_LABEL=all
-        # check every 10 seconds
+      # check every 10 seconds
       - AUTOHEAL_INTERVAL=10
-        # wait 0 seconds before first health check
+      # wait 0 seconds before first health check
       - AUTOHEAL_START_PERIOD=0
-        # Docker waits max 10 seconds (the Docker default) for a container to stop before killing
+      # Docker waits max 10 seconds (the Docker default) for a container to stop before killing
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=10
-        # Unix socket for curl requests to Docker API
+      # Unix socket for curl requests to Docker API
       - DOCKER_SOCK=/var/run/docker.sock
-        # --max-time seconds for curl requests to Docker API
+      # --max-time seconds for curl requests to Docker API
       - CURL_TIMEOUT=30
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  grafana:
+    restart: unless-stopped
+    build: grafana/
+    environment:
+      - SORMAS_POSTGRES_USER=${SORMAS_POSTGRES_USER}
+      - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+    ports:
+      - 3000:3000
