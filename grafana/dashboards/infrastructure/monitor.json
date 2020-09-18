@@ -65,7 +65,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Load Test",
+      "title": "Load Test (random values as example)",
       "tooltip": {
         "shared": true,
         "sort": 0,

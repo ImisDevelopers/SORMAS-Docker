@@ -20,7 +20,7 @@ datasources:
     url: ${DB_HOST}:5432
     user: ${SORMAS_POSTGRES_USER}
     database: ${DB_NAME}
-    isDefault: false
+    isDefault: true
     # <map> fields that will be converted to json and stored in jsonData
     jsonData:
       postgresVersion: 1000
