@@ -18,7 +18,7 @@ datasources:
     # <int> org id. will default to orgId 1 if not specified
     orgId: 1
     url: ${DB_HOST}:5432
-    user: ${SORMAS_POSTGRES_USER}
+    user: grafanareader
     database: ${DB_NAME}
     isDefault: true
     # <map> fields that will be converted to json and stored in jsonData

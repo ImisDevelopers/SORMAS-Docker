@@ -7,8 +7,8 @@ data to the database, you can start to create visualizations :) Follow the infor
 [here](https://grafana.com/docs/grafana/latest/features/datasources/postgres/).
 
 ### Questions/Todo
-- [ ] Secure PostgreSQL access!
-- [ ] Store data in postgres?
+- ~Secure PostgreSQL access!~
+- Store data in postgres such that it is backed up
 - [ ] Can we use keycloak for user authentication?
 - [ ] Go through the config file and remove everything we don't need!
 

@@ -61,7 +61,8 @@ services:
     labels:
       - autoheal=true
     command: -c 'config_file=/etc/postgresql/postgresql.conf'
-    image: hzibraunschweig/sormas-postgres:${SORMAS_DOCKER_VERSION}
+    #image: hzibraunschweig/sormas-postgres:${SORMAS_DOCKER_VERSION}
+    build: postgres/
     environment:
       - POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
       - DB_NAME=sormas
@@ -164,3 +165,5 @@ services:
       - DB_NAME=${DB_NAME}
     ports:
       - 3000:3000
+    depends_on:
+      - postgres
