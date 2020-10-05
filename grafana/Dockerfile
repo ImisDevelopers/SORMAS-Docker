@@ -1,4 +1,4 @@
-FROM grafana/grafana
+FROM grafana/grafana:7.2.0
 
 # https://grafana.com/docs/grafana/latest/administration/configuration/
 # https://grafana.com/docs/grafana/latest/installation/configure-docker/

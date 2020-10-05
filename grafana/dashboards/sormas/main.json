@@ -43,6 +43,7 @@
         "y": 0
       },
       "hiddenSeries": false,
+      "hideTimeOverride": false,
       "id": 2,
       "legend": {
         "alignAsTable": true,
@@ -61,7 +62,7 @@
       "linewidth": 1,
       "nullPointMode": "null",
       "percentage": false,
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -75,7 +76,7 @@
           "group": [
             {
               "params": [
-                "$__interval",
+                "1d",
                 "none"
               ],
               "type": "time"
@@ -83,7 +84,7 @@
           ],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  $__timeGroupAlias(reportdate,$__interval),\n  count(id) AS \"Cases\"\nFROM cases\nWHERE\n  $__timeFilter(reportdate)\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  $__timeGroupAlias(reportdate,1d),\n  count(id) AS \"Cases\"\nFROM cases\nWHERE\n  $__timeFilter(reportdate)\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [
