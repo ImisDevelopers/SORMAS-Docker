@@ -19,9 +19,6 @@
   "links": [],
   "panels": [
     {
-      "aliasColors": {
-        "A-series": "yellow"
-      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -61,6 +58,9 @@
       "lines": true,
       "linewidth": 1,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
       "pluginVersion": "7.2.0",
       "pointradius": 2,
@@ -121,7 +121,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
+      "timeFrom": "7d",
       "timeRegions": [],
       "timeShift": null,
       "title": "Reported Cases",
@@ -140,6 +140,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:103",
           "decimals": 0,
           "format": "none",
           "label": "Number of Cases",
@@ -149,6 +150,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:104",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -160,7 +162,8 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "aliasColors": {}
     }
   ],
   "refresh": "15m",
@@ -171,7 +174,7 @@
     "list": []
   },
   "time": {
-    "from": "now-6M",
+    "from": "now-1M",
     "to": "now"
   },
   "timepicker": {
